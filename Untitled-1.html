@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Custom Confirm Exit</title>
+  <style>
+    /* Styles for the modal and overlay */
+    #modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <div id="overlay"></div>
+  
+  <div id="modal">
+    <h2>Confirm Exit</h2>
+    <p>Are you sure you want to leave this page?</p>
+    <button id="confirmExit">Exit</button>
+    <button id="cancelExit">Cancel</button>
+  </div>
+  
+  <!-- Your webpage content -->
+  
+  <script>
+    // Get references to the modal and overlay
+    var modal = document.getElementById('modal');
+    var overlay = document.getElementById('overlay');
+    
+    // Function to display the modal
+    function showModal() {
+      modal.style.display = 'block';
+      overlay.style.display = 'block';
+    }
+    
+    // Function to hide the modal
+    function hideModal() {
+      modal.style.display = 'none';
+      overlay.style.display = 'none';
+    }
+    
+    // Attach event listener to the 'unload' event
+    window.addEventListener('unload', function (event) {
+      event.preventDefault(); // Cancel the default behavior of the browser's dialog
+      showModal(); // Display the modal
+    });
+    
+    // Attach event listener to the 'onbeforeunload' event
+    window.addEventListener('beforeunload', function (event) {
+      if (modal.style.display === 'block') {
+        hideModal(); // Hide the modal
+        return; // Allow the browser's default dialog to show
+      }
+      
+      // Display a generic message if the modal is not already shown
+      event.preventDefault(); // Cancel the default behavior of the browser's dialog
+      event.returnValue = ''; // Empty string to avoid showing the default dialog
+    });
+    
+    // Attach event listener to the 'Exit' button in the modal
+    document.getElementById('confirmExit').addEventListener('click', function() {
+      hideModal(); // Hide the modal
+      window.removeEventListener('unload', confirmExit); // Remove the 'unload' event listener
+      window.close(); // Close the window or perform other exit actions
+    });
+    
+    // Attach event listener to the 'Cancel' button in the modal
+    document.getElementById('cancelExit').addEventListener('click', function() {
+      hideModal(); // Hide the modal
+    });
+  </script>
+</body>
+</html>

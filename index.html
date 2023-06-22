@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Excel to HTML Table Converter</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.8/xlsx.full.min.js"></script>
+</head>
+<body>
+  <h1>Excel to HTML Table Converter</h1>
+  <input type="file" id="input_file">
+  <button onclick="convertExcelToTable()">Convert</button>
+  <div id="output_table"></div>
+  <input type="file" id="file-input">
+
+  <script>
+    const fileInput = document.getElementById('file-input');
+  
+    // Set the value of the file input element to the path of the file you want to select
+    fileInput.value = "/path/to/your/file.txt";
+
+    function convertExcelToTable() {
+      // Read table data from Excel file
+      const file = document.getElementById('input_file').files[0];
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const workbook = XLSX.read(e.target.result, { type: 'binary' });
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const tableData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+        
+        // Convert table data to HTML table
+        let html = '<table border="2">';
+        for (let i = 0; i < tableData.length; i++) {
+          html += '<tr>';
+          for (let j = 0; j < tableData[i].length; j++) {
+            html += `<td>${tableData[i][j]}</td>`;
+          }
+          html += '</tr>';
+        }
+        html += '</table>';
+        
+        // Display HTML table
+        document.getElementById('output_table').innerHTML = html;
+      };
+      reader.readAsBinaryString(file);
+    }
+  </script>
+</body>
+</html>
