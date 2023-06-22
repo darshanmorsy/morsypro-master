@@ -13,6 +13,8 @@ const payFees = require('../models/payFees.model')
 const nodemailer = require('nodemailer')
 const cloudinary = require('../helper/cloudinary')
 const { time } = require("console")
+
+
 exports.loginManager = async (req, res, next) => {
     try {
         const email = req.body.email;
@@ -58,31 +60,29 @@ exports.managerAdmin = async (req, res) => {
         const deactiveEnquiry = await Enquiry.find({ status: false });
         const managerData = await Manager.find();
 
-        function formatAMPM(date) {
-            var hours = date.getHours();
-            var minutes = date.getMinutes();
-            var ampm = hours >= 12 ? 'pm' : 'am';
-            hours = hours % 12;
-            hours = hours ? hours : 12; // the hour '0' should be '12'
-            hours = hours < 10 ? '0' + hours : hours; // add leading zero if less than 10
-            minutes = minutes < 10 ? '0' + minutes : minutes;
-            var strTime = hours + ':' + minutes + ' ' + ampm;
-            return strTime;
-        }
-        var current_time = new Date();
-        console.log(current_time);
-        var times = formatAMPM(current_time);
-        var hours = times[0] + times[1] + times[6] + times[7];
-        console.log(hours);
-        var time = hours[0] + hours[1] + ':00 ' + hours[2] + hours[3];
-        console.log(time);
-        var tim = String(time);
-        console.log(tim, 'k');
+        // function formatAMPM(date) {
+        //     var hours = date.getHours();
+        //     var minutes = date.getMinutes();
+        //     var ampm = hours >= 12 ? 'pm' : 'am';
+        //     hours = hours % 12;
+        //     hours = hours ? hours : 12; // the hour '0' should be '12'
+        //     hours = hours < 10 ? '0' + hours : hours; // add leading zero if less than 10
+        //     minutes = minutes < 10 ? '0' + minutes : minutes;
+        //     var strTime = hours + ':' + minutes + ' ' + ampm;
+        //     return strTime;
+        // }
+        // var current_time = new Date();
+        // console.log(current_time);
+        // var times = formatAMPM(current_time);
+        // var hours = times[0] + times[1] + times[6] + times[7];
+        // console.log(hours);
+        // var time = hours[0] + hours[1] + ':00 ' + hours[2] + hours[3];
+        // console.log(time);
+        // var tim = String(time);
+        // console.log(tim, 'k');
 
-        var batches = await Student.find({ batch_time: tim, present_status: 0 });
-        var present = await Student.find({ batch_time: tim, present_status: 1 });
-
-        console.log("OOOO", Date());
+     
+        // console.log("OOOO", Date());
 
         res.render('manager_dashboard',
             {
@@ -90,11 +90,8 @@ exports.managerAdmin = async (req, res) => {
                 studentData,
                 activeEnquiry,
                 deactiveEnquiry,
-                managerData,
-                batches,
-                present
+                managerData,      
             });
-
 
     } catch (error) {
         console.log(`manager Dashboard Error ${error}`);
@@ -128,7 +125,6 @@ exports.delete_enquiry = async (req, res) => {
 
     try {
         if (req.params.id) {
-
             var delete_enquiry = req.params.id;
             if (delete_enquiry) {
                 var delete_data = await Enquiry.findByIdAndDelete(delete_enquiry);
@@ -303,6 +299,7 @@ module.exports.deActive = async (req, res) => {
     }
 
 }
+
 module.exports.update_enquiry_demo = async (req, res) => {
     try {
 
@@ -346,6 +343,7 @@ exports.update_enquiry_data = async (req, res) => {
 }
 
 exports.add_student_data = async (req, res) => {
+
     try {
         console.log(req.body);
         console.log(req.file.path);
@@ -364,6 +362,7 @@ exports.add_student_data = async (req, res) => {
         data = await Student.create(req.body);
         if (data) {
             console.log('addmission added successfully');
+            req.flash('success','student added successfully');
             return res.redirect('/manager/view_student');
         }
     } catch (err) {
@@ -393,18 +392,8 @@ exports.view_addmission_profile = async (req, res) => {
         var ss = await Student.findById(req.params.id);
         
         const studentAttendance = ss.presents
-        // const studentAttendance = [
-        //   // { date: '2023-01-01', present: true },
-        //   { date: '2023-01-05', present: true },
-        //   { date: '2023-01-10', present: true },
-        //   { date: '2023-01-12', present: true },
-        //   { date: '2023-01-15', present: true },
-        //   { date: '2023-01-14', present: false },
-        //   { date: '2023-01-12', present: false },
-        //   { date: '2023-01-18', present: true },
-        // ];
-        
-        console.log(studentAttendance);
+      
+        // console.log(studentAttendance);
         
         // Create calendar for multiple months
         const startYear = 2023;
@@ -442,9 +431,7 @@ exports.view_addmission_profile = async (req, res) => {
           }
         }
         
-        console.log(calendarHtml);
-        
-console.log(calendarHtml);
+        // console.log(calendarHtml);
 
         res.render('view_addmission_profile', {
             profile,

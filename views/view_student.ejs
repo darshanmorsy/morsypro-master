@@ -29,6 +29,11 @@
                         
                             <span class="d-block m-t-5">  <h5>Search Student :</h5>
                             <input type="text" style="" id="searchBox" onkeyup="searchTable()"></span>
+                            <% if (messages.success) { %>  
+                                <div class="alert my-4 alert-success">
+                                    <%= messages.success %>
+                                </div>                  
+                                <% } %>
                         </div>
                         <div class="card-body table-border-style">
                             <div class="table-responsive">

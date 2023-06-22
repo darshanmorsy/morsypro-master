@@ -12,6 +12,7 @@
 <!-- custom-chart js -->
 <script src="/js/pages/dashboard-main.js"></script>
 <script>
+    
     function changeColor() {
         var text = document.getElementById("myText");
         text.style.background = "green";
@@ -27,44 +28,7 @@
     location.reload();
   }
  });
-
-
- (function ($) {
-    "use strict";
-
-    // Spinner
-    var spinner = function () {
-        setTimeout(function () {
-            if ($('#spinner').length > 0) {
-                $('#spinner').removeClass('show');
-            }
-        }, 1);
-    };
-    spinner();
-    
-    
-    // Initiate the wowjs
-    // new WOW().init();
-
-
-    // Sticky Navbar
-    
-})(jQuery);
-
-
 </script>
-<style>
-  #loader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  /* Add styling and animation properties for the loader */
-}
-
-</style>
 </body>
 
 </html>
