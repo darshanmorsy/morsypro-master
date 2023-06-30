@@ -393,7 +393,7 @@ exports.view_addmission_profile = async (req, res) => {
         
         const studentAttendance = ss.presents
       
-        // console.log(studentAttendance);
+        console.log(studentAttendance);
         
         // Create calendar for multiple months
         const startYear = 2023;
