@@ -39,6 +39,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'party')));
 app.use(logger('dev'));
+app.use((req, res, next)=> {
+    if (!req.cookies.jwt)
+        res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    next();
+});
 
 const adminRouter = require("./routers/admin.routes");
 const managerRouter = require("./routers/manager.routes");
