@@ -401,35 +401,43 @@ exports.view_addmission_profile = async (req, res) => {
         const numMonths = 12;
         let calendarHtml = '';
         
-        for (let y = startYear; y <= endYear; y++) {
-          for (let m = 0; m < numMonths; m++) {
-            const month = m;
-            const monthCalendar = calendar.monthDays(y, month);
-        
-            // Generate calendar HTML
-            let monthHtml = `<div><h2>${new Date(
-              y,
-              month
-            ).toLocaleString('default', { month: 'long' })} ${y}</h2>`;
-        
-            monthHtml += '<table>';
-            for (let week of monthCalendar) {
-              monthHtml += '<tr>';
-              for (let day of week) {
-                const formattedDate = new Date(`${y}-${month + 1}-${day}`);
-                const attendance = studentAttendance.find(
-                  a =>
-                    new Date(a.date).toDateString() === formattedDate.toDateString()
-                );
-                const className = attendance && attendance.present ? 'present' : '';
-                monthHtml += `<td class="${className}">${day ? day : ''}</td>`;
-              }
-              monthHtml += '</tr>';
-            }
-            monthHtml += '</table></div>';
-            calendarHtml += monthHtml;
-          }
-        }
+       for (let y = startYear; y <= endYear; y++) {
+  for (let m = 0; m < numMonths; m++) {
+    const month = m;
+    const monthCalendar = calendar.monthDays(y, month);
+
+    // Generate calendar HTML
+    let monthHtml = `<div><h2>${new Date(
+      y,
+      month
+    ).toLocaleString('default', { month: 'long' })} ${y}</h2>`;
+
+    // Add day names row
+    monthHtml += '<table>';
+    monthHtml += '<tr>';
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    for (let i = 0; i < dayNames.length; i++) {
+      monthHtml += `<th>${dayNames[i]}</th>`;
+    }
+    monthHtml += '</tr>';
+
+    for (let week of monthCalendar) {
+      monthHtml += '<tr>';
+      for (let day of week) {
+        const formattedDate = new Date(`${y}-${month + 1}-${day}`);
+        const attendance = studentAttendance.find(
+          a =>
+            new Date(a.date).toDateString() === formattedDate.toDateString()
+        );
+        const className = attendance && attendance.present ? 'present' : '';
+        monthHtml += `<td class="${className}">${day ? day : ''}</td>`;
+      }
+      monthHtml += '</tr>';
+    }
+    monthHtml += '</table></div>';
+    calendarHtml += monthHtml;
+  }
+}
         
         // console.log(calendarHtml);
 
